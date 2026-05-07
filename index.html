@@ -1,0 +1,458 @@
+<!doctype html>
+<!-- saved from url=(0049)file:///C:/Users/AMDIN/Downloads/index%20(3).html -->
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Registration</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com/" />
+    <link href="./index_files/css2" rel="stylesheet" />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --bg: #0f0f11;
+        --surface: #1a1a1f;
+        --border: #2e2e36;
+        --border-focus: #7c6aff;
+        --accent: #7c6aff;
+        --accent-glow: rgba(124, 106, 255, 0.25);
+        --text: #f0eff5;
+        --muted: #7a7a8a;
+        --error: #ff5c6a;
+        --error-bg: rgba(255, 92, 106, 0.08);
+        --success: #3fe08a;
+        --success-bg: rgba(63, 224, 138, 0.08);
+        --valid: #3fe08a;
+      }
+
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem;
+        background-image:
+          radial-gradient(
+            ellipse 60% 50% at 20% 10%,
+            rgba(124, 106, 255, 0.12) 0%,
+            transparent 60%
+          ),
+          radial-gradient(
+            ellipse 40% 40% at 80% 90%,
+            rgba(63, 224, 138, 0.07) 0%,
+            transparent 60%
+          );
+      }
+
+      .card {
+        width: 100%;
+        max-width: 480px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 2.5rem 2rem;
+        box-shadow: 0 0 60px rgba(0, 0, 0, 0.5);
+        animation: fadeUp 0.5s ease both;
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .card-header {
+        margin-bottom: 2rem;
+      }
+
+      .card-header h1 {
+        font-family: "DM Serif Display", serif;
+        font-size: 2rem;
+        font-weight: 400;
+        letter-spacing: -0.5px;
+        line-height: 1.15;
+      }
+
+      .card-header p {
+        margin-top: 0.4rem;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .field {
+        margin-bottom: 1.2rem;
+      }
+
+      label {
+        display: block;
+        font-size: 0.82rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 0.45rem;
+      }
+
+      .input-wrap {
+        position: relative;
+      }
+
+      input {
+        width: 100%;
+        background: var(--bg);
+        border: 1.5px solid var(--border);
+        border-radius: 10px;
+        color: var(--text);
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.95rem;
+        padding: 0.75rem 1rem;
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+        -webkit-appearance: none;
+      }
+
+      input:focus {
+        border-color: var(--border-focus);
+        box-shadow: 0 0 0 3px var(--accent-glow);
+      }
+
+      input.valid {
+        border-color: var(--valid);
+      }
+
+      input.invalid {
+        border-color: var(--error);
+        background: var(--error-bg);
+      }
+
+      .status-icon {
+        position: absolute;
+        right: 0.85rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1rem;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+
+      input.valid ~ .status-icon::after {
+        content: "✓";
+        color: var(--valid);
+        opacity: 1;
+      }
+      input.invalid ~ .status-icon::after {
+        content: "✗";
+        color: var(--error);
+        opacity: 1;
+      }
+      input.valid ~ .status-icon,
+      input.invalid ~ .status-icon {
+        opacity: 1;
+      }
+
+      .hint {
+        margin-top: 0.35rem;
+        font-size: 0.78rem;
+        min-height: 1rem;
+        transition: color 0.2s;
+      }
+
+      .hint.error {
+        color: var(--error);
+      }
+      .hint.success {
+        color: var(--valid);
+      }
+      .hint.neutral {
+        color: var(--muted);
+      }
+
+      .password-rules {
+        margin-top: 0.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.3rem 0.6rem;
+      }
+
+      .rule {
+        font-size: 0.75rem;
+        color: var(--muted);
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        transition: color 0.2s;
+      }
+
+      .rule .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--muted);
+        transition: background 0.2s;
+        flex-shrink: 0;
+      }
+
+      .rule.met {
+        color: var(--valid);
+      }
+      .rule.met .dot {
+        background: var(--valid);
+      }
+
+      .submit-btn {
+        width: 100%;
+        margin-top: 1.6rem;
+        padding: 0.85rem;
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-family: "DM Sans", sans-serif;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        letter-spacing: 0.02em;
+        transition:
+          background 0.2s,
+          transform 0.1s,
+          box-shadow 0.2s;
+      }
+
+      .submit-btn:hover {
+        background: #9080ff;
+        box-shadow: 0 4px 20px rgba(124, 106, 255, 0.4);
+      }
+
+      .submit-btn:active {
+        transform: scale(0.98);
+      }
+
+      #success-banner {
+        display: none;
+        margin-top: 1.2rem;
+        padding: 1rem;
+        border-radius: 10px;
+        background: var(--success-bg);
+        border: 1px solid var(--valid);
+        color: var(--valid);
+        font-weight: 600;
+        text-align: center;
+        font-size: 0.95rem;
+        animation: fadeUp 0.3s ease both;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="card-header">
+        <h1>Create Account</h1>
+        <p>Fill in the details below to register.</p>
+      </div>
+
+      <form id="registration-form" novalidate="">
+        <!-- Full Name -->
+        <div class="field">
+          <label for="fullname">Full Name</label>
+          <div class="input-wrap">
+            <input
+              type="text"
+              id="fullname"
+              placeholder="Jane Doe"
+              autocomplete="name"
+            />
+            <span class="status-icon"></span>
+          </div>
+          <div class="hint neutral" id="fullname-hint">
+            Enter your first and last name.
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="field">
+          <label for="email">Email Address</label>
+          <div class="input-wrap">
+            <input
+              type="email"
+              id="email"
+              placeholder="jane@example.com"
+              autocomplete="email"
+            />
+            <span class="status-icon"></span>
+          </div>
+          <div class="hint neutral" id="email-hint">
+            e.g. example@domain.com
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="input-wrap">
+            <input
+              type="password"
+              id="password"
+              placeholder="••••••••"
+              autocomplete="new-password"
+            />
+            <span class="status-icon"></span>
+          </div>
+          <div class="password-rules" id="password-rules">
+            <span class="rule" id="rule-length"
+              ><span class="dot"></span>8+ chars</span
+            >
+            <span class="rule" id="rule-upper"
+              ><span class="dot"></span>Uppercase</span
+            >
+            <span class="rule" id="rule-number"
+              ><span class="dot"></span>Number</span
+            >
+            <span class="rule" id="rule-special"
+              ><span class="dot"></span>Special char</span
+            >
+          </div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="field">
+          <label for="confirm-password">Confirm Password</label>
+          <div class="input-wrap">
+            <input
+              type="password"
+              id="confirm-password"
+              placeholder="••••••••"
+              autocomplete="new-password"
+            />
+            <span class="status-icon"></span>
+          </div>
+          <div class="hint neutral" id="confirm-hint">
+            Re-enter your password.
+          </div>
+        </div>
+
+        <!-- Age -->
+        <div class="field">
+          <label for="age">Age</label>
+          <div class="input-wrap">
+            <input type="number" id="age" placeholder="18" min="0" max="120" />
+            <span class="status-icon"></span>
+          </div>
+          <div class="hint neutral" id="age-hint">You must be 18 or older.</div>
+        </div>
+
+        <button type="submit" class="submit-btn">Create Account</button>
+      </form>
+
+      <div id="success-banner">🎉 Registration successful! Welcome aboard.</div>
+    </div>
+
+    <script src="file:///C:/Users/AMDIN/Downloads/script.js"></script>
+  </body>
+</html>
+🧩 Project Title: Form Input Validation with JavaScript
+Objective:
+Test your understanding of JavaScript with the window api (prompt, alert), and input validation.
+
+Project Brief:
+Build a user registration form that validates inputs using JavaScript before submission.
+The form should include these fields:
+Full Name
+
+
+Email Address
+
+
+Password
+
+
+Confirm Password
+
+
+Age
+
+
+
+Validation Requirements:
+Field
+Rule
+Full Name
+Must not be empty and contain at least 2 words.
+Email Address
+Must follow a valid email format (e.g. example@domain.com).
+Password
+At least 8 characters, with one uppercase letter, one number, and one special character.
+Confirm Password
+Must match the Password field.
+Age
+Must be 18 or older.
+
+
+
+
+
+
+Functional Requirements:
+alert error messages when an input is invalid.
+
+
+Prevent form submission if there are validation errors.
+
+
+Show a success message if all inputs are valid.
+
+
+
+
+Submission:
+Upload the following files on github a form will be PROVIDED for submission:
+index.html
+
+
+script.js
+
+
+
+
+
+Scoring (10 marks total):
+Criteria
+Marks
+Description
+HTML Structure
+2
+Properly labeled form with required fields
+Validation Logic
+4
+Correct and complete JavaScript validation
+Error/Success Feedback
+2
+Clear user feedback on validation results
+Code Quality
+1
+Clean, readable, and well-organized code
+Bonus Features
+1
+Real-time validation or visual feedback
+
+Total: 10 marks
+
+Submission Link: https://forms.gle/YbyWkK9u6B3ANzCc9 
+Submission Deadline: 10th May, 2026
